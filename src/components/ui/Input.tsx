@@ -14,10 +14,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block text-sm font-medium text-gray-800 mb-1.5"
-          >
+          <label htmlFor={inputId} className="block text-sm font-medium text-gray-800 mb-1.5">
             {label}
           </label>
         )}
@@ -34,7 +31,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               "w-full px-3.5 py-2.5 text-sm rounded-lg border border-gray-200 bg-white text-gray-800 placeholder:text-gray-400",
               "focus:outline-none focus:border-gray-800 focus:ring-1 focus:ring-gray-800 transition",
               error && "border-red-400 focus:border-red-500 focus:ring-red-500",
-              leftIcon && "pl-10",
+              leftIcon ? "pl-10" : "", // এখানে টাইপ এরর ঠিক করা হয়েছে
               className
             )}
             {...props}

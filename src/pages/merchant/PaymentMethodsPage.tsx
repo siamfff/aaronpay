@@ -19,14 +19,13 @@ export default function PaymentMethodsPage() {
     rocket: { enabled: false, number: "" },
   });
 
-  // পেজ লোড হলে আগের ডেটা নিয়ে আসা
   useEffect(() => {
     const docId = profile?.merchantId || user?.uid;
     if (!docId) return;
 
     async function loadData() {
       try {
-        const snap = await getDoc(doc(db, "merchants", docId));
+        const snap = await getDoc(doc(db, "merchants", docId as string));
         if (snap.exists()) {
           const data = snap.data();
           if (data.paymentMethods) {
@@ -41,7 +40,6 @@ export default function PaymentMethodsPage() {
   }, [profile, user]);
 
   async function handleSave() {
-    // merchantId না থাকলে uid ব্যবহার করব
     const docId = profile?.merchantId || user?.uid;
 
     if (!docId) {
@@ -54,7 +52,6 @@ export default function PaymentMethodsPage() {
     setSuccess("");
 
     try {
-      // setDoc with merge ব্যবহার করছি যাতে ডকুমেন্ট না থাকলে তৈরি হয়
       await setDoc(doc(db, "merchants", docId), {
         paymentMethods: methods,
         uid: user?.uid,
@@ -83,7 +80,6 @@ export default function PaymentMethodsPage() {
       {error && <Alert tone="error">{error}</Alert>}
 
       <div className="grid gap-6">
-        {/* bKash */}
         <Card className="border-l-4 border-l-[#E2136E]">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-gray-800">bKash</h3>
@@ -106,7 +102,6 @@ export default function PaymentMethodsPage() {
           />
         </Card>
 
-        {/* Nagad */}
         <Card className="border-l-4 border-l-[#F7941D]">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-gray-800">Nagad</h3>
@@ -129,7 +124,6 @@ export default function PaymentMethodsPage() {
           />
         </Card>
 
-        {/* Rocket */}
         <Card className="border-l-4 border-l-[#8C3494]">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-gray-800">Rocket</h3>
