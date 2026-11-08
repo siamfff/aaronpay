@@ -15,20 +15,10 @@ CHECKOUT_BASE_URL = "https://aaronpay.cyou/checkout"
 FIREBASE_PROJECT_ID = "aaron-pay"
 FIREBASE_DATABASE_URL = "https://aaron-pay-default-rtdb.firebaseio.com"
 
-[[kv_namespaces]]
-binding = "RATE_LIMIT_KV"
-id = "REPLACE_WITH_KV_ID"
-preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
+# KV Namespace (আসলে যেহেতু কোডে ব্যবহার হচ্ছে না, তাই আপাতত কমেন্ট করুন)
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT_KV"
+# id = "REPLACE_WITH_KV_ID"
 
 [observability]
 enabled = true
-
-# ─────────────────────────────────────────────
-# Secrets (এগুলো `wrangler secret put NAME` দিয়ে সেট করতে হবে):
-#
-#   FIREBASE_SERVICE_ACCOUNT_JSON   → পুরো service account JSON (এক লাইনে)
-#   CLOUDINARY_API_KEY
-#   CLOUDINARY_API_SECRET
-#   CLOUDINARY_CLOUD_NAME
-#   ADMIN_EMAILS                    → comma-separated
-# ─────────────────────────────────────────────
