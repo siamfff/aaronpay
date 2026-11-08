@@ -31,7 +31,6 @@ export default function ApiKeysPage() {
   const [pin, setPin] = useState("");
   const [isPinSet, setIsPinSet] = useState(false);
   const [actionType, setActionType] = useState<"create" | "view" | "rotate">("create");
-  const [tempKey, setTempKey] = useState(""); // পিন দেওয়ার পর temporary key দেখানোর জন্য
 
   const docId = profile?.merchantId || user?.uid;
 
@@ -39,7 +38,8 @@ export default function ApiKeysPage() {
     async function loadData() {
       if (!docId) return;
       try {
-        const snap = await getDoc(doc(db, "merchants", docId));
+        // TypeScript এরর এড়াতে docId কে string হিসেবে কাস্ট করা হলো
+        const snap = await getDoc(doc(db, "merchants", docId as string));
         if (snap.exists()) {
           const data = snap.data();
           if (data.apiKey && data.apiKeyPin) {
@@ -70,7 +70,11 @@ export default function ApiKeysPage() {
     setLoading(true);
 
     try {
-      const docRef = doc(db, "merchants", docId!);
+      if (!docId) {
+        throw new Error("User ID not found. Please re-login.");
+      }
+      
+      const docRef = doc(db, "merchants", docId);
       const snap = await getDoc(docRef);
       const data = snap.data();
 
@@ -97,7 +101,6 @@ export default function ApiKeysPage() {
         if (actionType === "view") {
           setApiKey(data.apiKey);
           setShowKey(true);
-          setTempKey(data.apiKey);
         } else if (actionType === "rotate") {
           const newKey = "ap_live_" + Array.from(crypto.getRandomValues(new Uint8Array(16)))
             .map(b => b.toString(16).padStart(2, '0')).join('');

@@ -44,7 +44,8 @@ const plans = [
   },
 ];
 
-const fmt = (n) => "৳" + Math.round(n).toLocaleString("en-US");
+// টাইপস্ক্রিপ্ট এরর দূর করতে 'n: number' যোগ করা হলো
+const fmt = (n: number) => "৳" + Math.round(n).toLocaleString("en-US");
 const monthlyPrice = plans[0].price;
 
 export default function PricingSection() {
