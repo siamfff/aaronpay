@@ -1,0 +1,34 @@
+name = "aaronpay"
+main = "worker/index.ts"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[vars]
+ENVIRONMENT = "production"
+API_BASE_URL = "https://api.aaronpay.cyou/v1"
+CHECKOUT_BASE_URL = "https://aaronpay.cyou/checkout"
+FIREBASE_PROJECT_ID = "aaron-pay"
+FIREBASE_DATABASE_URL = "https://aaron-pay-default-rtdb.firebaseio.com"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "REPLACE_WITH_KV_ID"
+preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
+
+[observability]
+enabled = true
+
+# ─────────────────────────────────────────────
+# Secrets (এগুলো `wrangler secret put NAME` দিয়ে সেট করতে হবে):
+#
+#   FIREBASE_SERVICE_ACCOUNT_JSON   → পুরো service account JSON (এক লাইনে)
+#   CLOUDINARY_API_KEY
+#   CLOUDINARY_API_SECRET
+#   CLOUDINARY_CLOUD_NAME
+#   ADMIN_EMAILS                    → comma-separated
+# ─────────────────────────────────────────────
