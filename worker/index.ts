@@ -4,7 +4,7 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     
-    // CORS হেডার
+    // CORS হেডার (ব্লগার বা অন্যান্য ডোমেইন থেকে রিকোয়েস্ট এক্সেপ্ট করার জন্য)
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -26,17 +26,24 @@ export default {
           return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400, headers: corsHeaders });
         }
 
+        // আপনার পুরনো সিস্টেমের পাথে ডেটা খোঁজা
         const dbUrl = `${env.FIREBASE_DATABASE_URL}/XNXANIKPAY/${merchantId}/${txnId}.json`;
         const response = await fetch(dbUrl);
         const data: any = await response.json();
+
+        // ডিবাগ করার জন্য
+        console.log("Firebase Data received:", JSON.stringify(data));
 
         if (!data) {
           return new Response(JSON.stringify({ error: "Transaction ID not found in App." }), { status: 404, headers: corsHeaders });
         }
 
-        // টাকার পরিমাণ চেক (Number কনভার্সন নিশ্চিত করা হলো)
-        if (Number(data.amount) !== Number(amount)) {
-          return new Response(JSON.stringify({ error: `Amount mismatch. Expected: ৳${amount}, Found: ৳${data.amount}` }), { status: 400, headers: corsHeaders });
+        // টাকার পরিমাণ চেক (parseFloat দিয়ে নিখুঁতভাবে চেক করা হচ্ছে)
+        const expectedAmount = parseFloat(amount);
+        const foundAmount = data.amount ? parseFloat(data.amount.toString()) : 0;
+
+        if (expectedAmount !== foundAmount) {
+          return new Response(JSON.stringify({ error: `Amount mismatch. Expected: ৳${expectedAmount}, Found: ৳${data.amount}` }), { status: 400, headers: corsHeaders });
         }
         
         // মেথড চেক
