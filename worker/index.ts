@@ -4,7 +4,7 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     
-    // CORS হেডার (ব্লগার বা অন্যান্য ডোমেইন থেকে রিকোয়েস্ট এক্সেপ্ট করার জন্য)
+    // CORS হেডার
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -12,7 +12,6 @@ export default {
       "Access-Control-Max-Age": "86400",
     };
 
-    // ব্রাউজারের প্রি-ফ্লাইট চেক হ্যান্ডেল করা
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
@@ -27,7 +26,6 @@ export default {
           return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400, headers: corsHeaders });
         }
 
-        // আপনার পুরনো সিস্টেমের পাথে ডেটা খোঁজা (XNXANIKPAY)
         const dbUrl = `${env.FIREBASE_DATABASE_URL}/XNXANIKPAY/${merchantId}/${txnId}.json`;
         const response = await fetch(dbUrl);
         const data: any = await response.json();
@@ -36,9 +34,9 @@ export default {
           return new Response(JSON.stringify({ error: "Transaction ID not found in App." }), { status: 404, headers: corsHeaders });
         }
 
-        // টাকার পরিমাণ চেক
+        // টাকার পরিমাণ চেক (Number কনভার্সন নিশ্চিত করা হলো)
         if (Number(data.amount) !== Number(amount)) {
-          return new Response(JSON.stringify({ error: "Amount mismatch." }), { status: 400, headers: corsHeaders });
+          return new Response(JSON.stringify({ error: `Amount mismatch. Expected: ৳${amount}, Found: ৳${data.amount}` }), { status: 400, headers: corsHeaders });
         }
         
         // মেথড চেক
@@ -110,7 +108,7 @@ export default {
           return new Response(JSON.stringify({ error: "Invalid request" }), { status: 400, headers: corsHeaders });
         }
 
-        // Firestore থেকে API Key দিয়ে মার্চেন্ট খোঁজা
+        // Firestore থেকে API Key দিয়ে মার্চেন্ট খোঁজা
         const queryUrl = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery`;
         
         const queryPayload = {
@@ -141,7 +139,7 @@ export default {
 
         const merchantDoc = queryData[0].document;
         const docPath = merchantDoc.name; 
-        const merchantId = docPath.split('/').pop(); // মার্চেন্টের আসল আইডি বের করা
+        const merchantId = docPath.split('/').pop();
 
         // মার্চেন্টের ডেটা (নাম, লোগো, নাম্বার) বের করা
         const fields = merchantDoc.fields || {};
@@ -157,7 +155,7 @@ export default {
         const rocketEnabled = fields.paymentMethods?.mapValue?.fields?.rocket?.mapValue?.fields?.enabled?.booleanValue || false;
         const rocketNum = fields.paymentMethods?.mapValue?.fields?.rocket?.mapValue?.fields?.number?.stringValue || "";
 
-        // নতুন সেশন তৈরি করে ফায়ারবেসে সেভ করা
+        // নতুন সেশন তৈরি করে ফায়ারবেসে সেভ করা
         const sessionId = `sess_${Math.random().toString(36).substring(2, 10)}`;
         const checkoutUrl = `https://aaronpay.cyou/checkout/${sessionId}`; 
 
