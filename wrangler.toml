@@ -9,16 +9,24 @@ binding = "ASSETS"
 not_found_handling = "single-page-application"
 
 [vars]
+# Vite বিল্ডের জন্য (এগুলো বিল্ড টাইমে ইনলাইন হবে)
+VITE_FIREBASE_API_KEY = "AIzaSyAa1ihwP3Lo9kEKqwjmxxnrZY7FqU71oDk"
+VITE_FIREBASE_AUTH_DOMAIN = "aaron-pay.firebaseapp.com"
+VITE_FIREBASE_DATABASE_URL = "https://aaron-pay-default-rtdb.firebaseio.com"
+VITE_FIREBASE_PROJECT_ID = "aaron-pay"
+VITE_FIREBASE_STORAGE_BUCKET = "aaron-pay.firebasestorage.app"
+VITE_FIREBASE_MESSAGING_SENDER_ID = "52359041482"
+VITE_FIREBASE_APP_ID = "1:52359041482:web:3da2a41ad6300e8c927f33"
+VITE_FIREBASE_MEASUREMENT_ID = "G-C3626Z9MWD"
+VITE_CLOUDINARY_CLOUD_NAME = "dkimntlkh"
+VITE_CLOUDINARY_UPLOAD_PRESET = "ml_default"
+
+# Worker রানটাইমের জন্য
 ENVIRONMENT = "production"
-API_BASE_URL = "https://api.aaronpay.cyou/v1"
+API_BASE_URL = "https://aaronpay.cyou/api"
 CHECKOUT_BASE_URL = "https://aaronpay.cyou/checkout"
 FIREBASE_PROJECT_ID = "aaron-pay"
 FIREBASE_DATABASE_URL = "https://aaron-pay-default-rtdb.firebaseio.com"
-
-# KV Namespace (আসলে যেহেতু কোডে ব্যবহার হচ্ছে না, তাই আপাতত কমেন্ট করুন)
-# [[kv_namespaces]]
-# binding = "RATE_LIMIT_KV"
-# id = "REPLACE_WITH_KV_ID"
 
 [observability]
 enabled = true
